@@ -14,19 +14,15 @@ serverSocket.listen(1)
 print ("The server is ready to receive")
 
 # The b u f f e r to s t o r e the r received data
-data = ""
+#data = 0
 
 # Forever accept incoming connections
 while 1 :
     # Accept a connection ; get client’s socket
     connectionSocket , addr = serverSocket.accept()
     # Receive whatever the newly connected client has to send
-    tmpBuff = ""
-    while len(data) != 40:
-        tmpBuff = connectionSocket.recv(40)
-        if not tmpBuff:
-            break
-        data += tmpBuff
-    print(data)
+    data = connectionSocket.recv(1000)
+        
+    print(data.decode())
     # Close the socket
     connectionSocket.close()

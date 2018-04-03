@@ -12,7 +12,8 @@ clientSocket = socket(AF_INET, SOCK_STREAM)
 clientSocket.connect((serverName, serverPort))
 
 # A string to send to server
-data = 'Hello world! This is a very long string.'
+data = "Hello world! This is a very long string."
+data = data.encode()
 
 #Senddd ittt
 bytesSent = 0
