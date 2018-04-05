@@ -12,10 +12,6 @@ clientSocket = socket(AF_INET, SOCK_STREAM)
 #Connect to server
 clientSocket.connect((serverName, serverPort))
 
-# A string to send to server
-data = "Hello world! This is a very long string."
-data = data.encode()
-
 # User menu for client
 while True:
     print('ftp>', end='', flush=True)
@@ -64,17 +60,14 @@ while True:
     elif words[0] == "put":
         if len(words) == 1: continue
         filename = words[1]
+        #opens file and stores data
+        with open(filename) as file:
+            data = file.read()
+        file.closed
+        data = data.encode()
         print("Sending file: ", filename)
         bytesSent = 0
-        # add file.open functionality. Currently resends earlier string
         while bytesSent != len(data):
             bytesSent += clientSocket.send(data[bytesSent:])
-
-
-#Senddd ittt
-#bytesSent = 0
-#while bytesSent != len(data):
-#    bytesSent += clientSocket.send(data[bytesSent:])
-                                   
 #Close socket
 clientSocket.close()
