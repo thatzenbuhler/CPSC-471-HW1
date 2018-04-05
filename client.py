@@ -28,6 +28,36 @@ while True:
         if len(words) == 1: continue
         filename = words[1]
         #search for filename; if found, download
+        if os.path.isfile(filename):
+            download = open(filename, "wb")
+            #while loop till all bytes are recvd
+           
+            #way number 1, just receives with a buffer of 1024 infinitely i believe
+            while True:
+                downData = clientSocket.recv(1024)
+                if not data:
+                    break
+                download.write(data)
+            download.close()
+         
+            #way number 2, try to get file size
+            #should return filesize to data size
+            dataSize = os.path.getsize(filename)
+            #buffer
+            downData = ""
+            #tmp buffer
+            movData = ""
+            #recv till all is recvd
+            while len(downData) < dataSize:
+                movData = clientSocket.recv(dataSize)
+                #server has closed the socket
+                if not movData:
+                    break
+                #append the received bytes to the buffer
+                downData += tmpData
+                download.write(downData)
+            download.close
+            
     elif words[0] == "ls":
         #list files on server
         test = 0
