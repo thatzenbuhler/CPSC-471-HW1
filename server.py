@@ -3,6 +3,7 @@ from socket import *
 import os, sys
 
 # The port on which to listen
+serverName = "localhost"
 serverPort = 1234
 contentPort = 2000
 
@@ -37,5 +38,17 @@ while 1 :
         print("Files in server directory:")
         for file in os.listdir():
             print(file)
+    elif menu[0] == "get":
+        contentSocket.connect((serverName, contentPort))
+        #opens file and stores data
+        with open(menu[1]) as file:
+            data = file.read()
+        file.closed
+        data = data.encode()
+        print("Sending file: ", menu[1])
+        bytesSent = 0
+        while bytesSent != len(data):
+            bytesSent += contentSocket.send(data[bytesSent:])
+        contentSocket.close()
     # Close the socket
     connectionSocket.close()

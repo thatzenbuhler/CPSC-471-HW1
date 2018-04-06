@@ -23,11 +23,16 @@ while True:
     if words[0] == "quit":
         break
     elif words[0] == "get":
+        #Send command and filename to search from server
         if len(words) == 1: continue
         filename = words[1]
-        #search for filename; if found, download
-        #if os.path.isfile(filename):
-            
+        clientSocket.send((words[0] + " " + words[1]).encode())
+        #Attempt to start a server-like connection to receive file
+        contentSocket.listen(1)
+        connect2, addr2 = contentSocket.accept()
+        content = connect2.recv(1024)
+        print(content.decode())
+        connect2.close()
     elif words[0] == "ls":
         #list files on server
         clientSocket.send(words[0].encode())
@@ -36,7 +41,7 @@ while True:
         filename = words[1]
         clientSocket.send((words[0] + " " + words[1]).encode())
         contentSocket.connect((serverName, contentPort))
-        #opens file and stores data
+        #Opens file and sends data over contentSocket
         with open(filename) as file:
             data = file.read()
         file.closed
