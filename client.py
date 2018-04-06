@@ -5,15 +5,20 @@ import os, sys
 #Name and port number of the server
 serverName = "localhost"
 serverPort = 1234
+contentPort = 2000
 
 #Create a socket
-clientSocket = socket(AF_INET, SOCK_STREAM)
+#clientSocket = socket(AF_INET, SOCK_STREAM)
+#contentSocket = socket(AF_INET, SOCK_STREAM)
 
 #Connect to server
-clientSocket.connect((serverName, serverPort))
+#clientSocket.connect((serverName, serverPort))
 
 # User menu for client
 while True:
+    #Connect or reconnect to the server
+    clientSocket = socket(AF_INET, SOCK_STREAM)
+    clientSocket.connect((serverName, serverPort))
     print('ftp>', end='', flush=True)
     # splits user input so it can read multiple arguments
     word = input()
@@ -21,46 +26,27 @@ while True:
     if words[0] == "quit":
         break
     elif words[0] == "get":
+        #Send command and filename to search from server
         if len(words) == 1: continue
         filename = words[1]
-        #search for filename; if found, download
-        if os.path.isfile(filename):
-            download = open(filename, "wb")
-            #while loop till all bytes are recvd
-           
-            #way number 1, just receives with a buffer of 1024 infinitely i believe
-            while True:
-                downData = clientSocket.recv(1024)
-                if not data:
-                    break
-                download.write(data)
-            download.close()
-         
-            #way number 2, try to get file size
-            #should return filesize to data size
-            dataSize = os.path.getsize(filename)
-            #buffer
-            downData = ""
-            #tmp buffer
-            movData = ""
-            #recv till all is recvd
-            while len(downData) < dataSize:
-                movData = clientSocket.recv(dataSize)
-                #server has closed the socket
-                if not movData:
-                    break
-                #append the received bytes to the buffer
-                downData += tmpData
-                download.write(downData)
-            download.close
-            
+        clientSocket.send((words[0] + " " + words[1]).encode())
+        #Attempt to start a server-like connection to receive file
+        contentSocket = socket(AF_INET, SOCK_STREAM)
+        contentSocket.listen(1)
+        connect2, addr2 = contentSocket.accept()
+        content = connect2.recv(1024)
+        print(content.decode())
+        connect2.close()
     elif words[0] == "ls":
         #list files on server
-        test = 0
+        clientSocket.send(words[0].encode())
     elif words[0] == "put":
         if len(words) == 1: continue
         filename = words[1]
-        #opens file and stores data
+        clientSocket.send((words[0] + " " + words[1]).encode())
+        contentSocket = socket(AF_INET, SOCK_STREAM)
+        contentSocket.connect((serverName, contentPort))
+        #Opens file and sends data over contentSocket
         with open(filename) as file:
             data = file.read()
         file.closed
@@ -68,6 +54,8 @@ while True:
         print("Sending file: ", filename)
         bytesSent = 0
         while bytesSent != len(data):
-            bytesSent += clientSocket.send(data[bytesSent:])
+            bytesSent += contentSocket.send(data[bytesSent:])
+        contentSocket.close()
+    clientSocket.close()
 #Close socket
-clientSocket.close()
+#clientSocket.close()

@@ -1,28 +1,54 @@
 # Server code
 from socket import *
+import os, sys
 
-# The port on which to l i s t e n
+# The port on which to listen
+serverName = "localhost"
 serverPort = 1234
+contentPort = 2000
 
 # Create a TCP socket
 serverSocket = socket(AF_INET, SOCK_STREAM)
+contentSocket = socket(AF_INET, SOCK_STREAM)
 # Bind the socket to the port
 serverSocket.bind(('', serverPort))
+contentSocket.bind(('', contentPort))
 
-# S t art l i s t e n i n g f or incoming connections
-serverSocket.listen(1)
+# Start listening for incoming connections
+#serverSocket.listen(1)
 print ("The server is ready to receive")
-
-# The b u f f e r to s t o r e the r received data
-#data = 0
 
 # Forever accept incoming connections
 while 1 :
+    serverSocket.listen(1)
     # Accept a connection ; get client’s socket
     connectionSocket , addr = serverSocket.accept()
     # Receive whatever the newly connected client has to send
-    data = connectionSocket.recv(1000)
-        
-    print(data.decode())
+    menu = connectionSocket.recv(1024)
+    menu = menu.decode()
+    menu = menu.split()
+    print(menu)
+    if menu[0] == "put":
+        contentSocket.listen(1)
+        connect2, addr2 = contentSocket.accept()
+        content = connect2.recv(1024)
+        print(content.decode())
+        connect2.close()
+    elif menu[0] == "ls":
+        print("Files in server directory:")
+        for file in os.listdir():
+            print(file)
+    elif menu[0] == "get":
+        contentSocket.connect((serverName, contentPort))
+        #opens file and stores data
+        with open(menu[1]) as file:
+            data = file.read()
+        file.closed
+        data = data.encode()
+        print("Sending file: ", menu[1])
+        bytesSent = 0
+        while bytesSent != len(data):
+            bytesSent += contentSocket.send(data[bytesSent:])
+        contentSocket.close()
     # Close the socket
     connectionSocket.close()
