@@ -6,6 +6,7 @@ import os, sys
 serverName = "localhost"
 serverPort = 1234
 contentPort = 2000
+reversePort = 2001
 
 #Create a socket
 #clientSocket = socket(AF_INET, SOCK_STREAM)
@@ -31,9 +32,10 @@ while True:
         filename = words[1]
         clientSocket.send((words[0] + " " + words[1]).encode())
         #Attempt to start a server-like connection to receive file
-        contentSocket = socket(AF_INET, SOCK_STREAM)
-        contentSocket.listen(1)
-        connect2, addr2 = contentSocket.accept()
+        recvSocket = socket(AF_INET, SOCK_STREAM)
+        recvSocket.bind(('', reversePort))
+        recvSocket.listen(1)
+        connect2, addr2 = recvSocket.accept()
         content = connect2.recv(1024)
         print(content.decode())
         connect2.close()

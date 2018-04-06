@@ -6,6 +6,7 @@ import os, sys
 serverName = "localhost"
 serverPort = 1234
 contentPort = 2000
+reversePort = 2001
 
 # Create a TCP socket
 serverSocket = socket(AF_INET, SOCK_STREAM)
@@ -39,7 +40,8 @@ while 1 :
         for file in os.listdir():
             print(file)
     elif menu[0] == "get":
-        contentSocket.connect((serverName, contentPort))
+        reverseSocket = socket(AF_INET, SOCK_STREAM)
+        reverseSocket.connect((serverName, reversePort))
         #opens file and stores data
         with open(menu[1]) as file:
             data = file.read()
@@ -48,7 +50,7 @@ while 1 :
         print("Sending file: ", menu[1])
         bytesSent = 0
         while bytesSent != len(data):
-            bytesSent += contentSocket.send(data[bytesSent:])
-        contentSocket.close()
+            bytesSent += reverseSocket.send(data[bytesSent:])
+        reverseSocket.close()
     # Close the socket
     connectionSocket.close()
