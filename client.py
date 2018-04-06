@@ -8,14 +8,17 @@ serverPort = 1234
 contentPort = 2000
 
 #Create a socket
-clientSocket = socket(AF_INET, SOCK_STREAM)
-contentSocket = socket(AF_INET, SOCK_STREAM)
+#clientSocket = socket(AF_INET, SOCK_STREAM)
+#contentSocket = socket(AF_INET, SOCK_STREAM)
 
 #Connect to server
-clientSocket.connect((serverName, serverPort))
+#clientSocket.connect((serverName, serverPort))
 
 # User menu for client
 while True:
+    #Connect or reconnect to the server
+    clientSocket = socket(AF_INET, SOCK_STREAM)
+    clientSocket.connect((serverName, serverPort))
     print('ftp>', end='', flush=True)
     # splits user input so it can read multiple arguments
     word = input()
@@ -28,6 +31,7 @@ while True:
         filename = words[1]
         clientSocket.send((words[0] + " " + words[1]).encode())
         #Attempt to start a server-like connection to receive file
+        contentSocket = socket(AF_INET, SOCK_STREAM)
         contentSocket.listen(1)
         connect2, addr2 = contentSocket.accept()
         content = connect2.recv(1024)
@@ -40,6 +44,7 @@ while True:
         if len(words) == 1: continue
         filename = words[1]
         clientSocket.send((words[0] + " " + words[1]).encode())
+        contentSocket = socket(AF_INET, SOCK_STREAM)
         contentSocket.connect((serverName, contentPort))
         #Opens file and sends data over contentSocket
         with open(filename) as file:
@@ -51,5 +56,6 @@ while True:
         while bytesSent != len(data):
             bytesSent += contentSocket.send(data[bytesSent:])
         contentSocket.close()
+    clientSocket.close()
 #Close socket
-clientSocket.close()
+#clientSocket.close()
