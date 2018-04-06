@@ -25,6 +25,7 @@ while True:
     word = input()
     words = word.split()
     if words[0] == "quit":
+        clientSocket.send(words[0].encode())
         break
     elif words[0] == "get":
         #Send command and filename to search from server
@@ -59,5 +60,5 @@ while True:
             bytesSent += contentSocket.send(data[bytesSent:])
         contentSocket.close()
     clientSocket.close()
-#Close socket
-#clientSocket.close()
+#Close final connection
+clientSocket.close()
