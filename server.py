@@ -2,11 +2,17 @@
 from socket import *
 import os, sys
 
-# The port on which to listen
+# The port on which to listen (no user arg given)
 serverName = "localhost"
 serverPort = 1234
 contentPort = 2000
 reversePort = 2001
+
+#Change ports to user arg
+if len(sys.argv) == 2:
+    serverPort = sys.argv[1]
+    contentPort = serverPort + 1
+    reversePort = contentPort + 1
 
 # Create a TCP socket
 serverSocket = socket(AF_INET, SOCK_STREAM)

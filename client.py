@@ -2,18 +2,19 @@
 from socket import *
 import os, sys
 
-#Name and port number of the server
+
+#Name and port number of the server (no user arg given)
 serverName = "localhost"
 serverPort = 1234
 contentPort = 2000
 reversePort = 2001
 
-#Create a socket
-#clientSocket = socket(AF_INET, SOCK_STREAM)
-#contentSocket = socket(AF_INET, SOCK_STREAM)
-
-#Connect to server
-#clientSocket.connect((serverName, serverPort))
+#Change ports to user arg
+if len(sys.argv) == 3:
+    serverName = sys.argv[1]
+    serverPort = sys.argv[2]
+    contentPort = serverPort + 1
+    reversePort = contentPort + 1
 
 # User menu for client
 while True:
