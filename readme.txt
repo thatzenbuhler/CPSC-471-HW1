@@ -2,7 +2,7 @@ CPSC 471-04
 Homework 1
 
 Tyler Hatzenbuhler: thatzenbuhler@csu.fullerton.edu
-Andrew
+Andrew Wysocki: drewsocki@csu.fullerton.edu
 
 ## Python 3.5 (Not tested on Python 2!) ##
 
