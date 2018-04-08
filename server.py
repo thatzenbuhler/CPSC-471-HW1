@@ -48,19 +48,23 @@ while 1 :
     elif menu[0] == "get":
         reverseSocket = socket(AF_INET, SOCK_STREAM)
         reverseSocket.connect((serverName, reversePort))
-        #opens file and stores data
-        with open(menu[1]) as file:
-            data = file.read()
-        file.closed
-        dataSize = str(len(data))
-        while len(dataSize) < 10:
-            dataSize = "0" + dataSize
-        data = dataSize + data
-        data = data.encode()
-        print("Sending file: ", menu[1])
-        bytesSent = 0
-        while bytesSent != len(data):
-            bytesSent += reverseSocket.send(data[bytesSent:])
-        reverseSocket.close()
+        #check if file exists
+        if(os.path.isfile(menu[1]):
+            #opens file and stores data
+            with open(menu[1]) as file:
+                data = file.read()
+            file.closed
+            dataSize = str(len(data))
+            while len(dataSize) < 10:
+                dataSize = "0" + dataSize
+            data = dataSize + data
+            data = data.encode()
+            print("Sending file: ", menu[1])
+            bytesSent = 0
+            while bytesSent != len(data):
+                bytesSent += reverseSocket.send(data[bytesSent:])
+            reverseSocket.close()
+         else:
+           print("File does not exist")
     # Close the socket
     connectionSocket.close()
