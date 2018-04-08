@@ -66,5 +66,5 @@ while 1 :
             reverseSocket.close()
          else:
            print("File does not exist")
-    # Close the socket
-    connectionSocket.close()
+        # Close the socket
+        connectionSocket.close()
