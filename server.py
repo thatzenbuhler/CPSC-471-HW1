@@ -49,7 +49,7 @@ while 1 :
         reverseSocket = socket(AF_INET, SOCK_STREAM)
         reverseSocket.connect((serverName, reversePort))
         #check if file exists
-        if(os.path.isfile(menu[1]):
+        if(os.path.isfile(menu[1])):
             #opens file and stores data
             with open(menu[1]) as file:
                 data = file.read()
