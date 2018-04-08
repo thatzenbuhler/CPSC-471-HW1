@@ -34,7 +34,8 @@ while 1 :
     menu = connectionSocket.recv(1024)
     menu = menu.decode()
     menu = menu.split()
-    print(menu)
+    print("Commands entered: ", menu)
+    if len(menu) == 0: continue
     if menu[0] == "put":
         contentSocket.listen(1)
         connect2, addr2 = contentSocket.accept()
@@ -64,7 +65,7 @@ while 1 :
             while bytesSent != len(data):
                 bytesSent += reverseSocket.send(data[bytesSent:])
             reverseSocket.close()
-         else:
+        else:
            print("File does not exist")
            dataSize = "0000000000"
            data = dataSize

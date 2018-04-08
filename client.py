@@ -87,7 +87,7 @@ while True:
             contentSocket.close()
         else:
            print("File does not exist")
-   else:
+    else:
            print("Invalid command")
 #Close final connection
 clientSocket.close()
