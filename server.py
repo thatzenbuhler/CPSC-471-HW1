@@ -66,5 +66,12 @@ while 1 :
             reverseSocket.close()
          else:
            print("File does not exist")
+           dataSize = "0000000000"
+           data = dataSize
+           data = data.encode()
+           bytesSent = 0
+           while bytesSent != len(data):
+                bytesSent += reverseSocket.send(data[bytesSent:])             
+           reverseSocket.close()
         # Close the socket
         connectionSocket.close()
