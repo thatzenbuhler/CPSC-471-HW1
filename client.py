@@ -68,7 +68,7 @@ while True:
     elif words[0] == "put":
         if len(words) == 1: continue
         filename = words[1]
-        if(os.path.isfile(words[1]):
+        if(os.path.isfile(words[1])):
             clientSocket.send((words[0] + " " + words[1]).encode())
             contentSocket = socket(AF_INET, SOCK_STREAM)
             contentSocket.connect((serverName, contentPort))
