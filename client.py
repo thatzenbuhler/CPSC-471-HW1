@@ -2,6 +2,22 @@
 from socket import *
 import os, sys
 
+def recvAll(sock, numBytes):
+    #The buffer
+    recvBuff = ""
+
+    #The temporary buffer
+    tmpBuff = ""
+    
+    while len(recvBuff) < numBytes:
+        tmpBuff = sock.recv(numBytes)
+
+        if not tmpBuff:
+            break
+
+        tmpBuff = tmpBuff.decode()
+        recvBuff += tmpBuff
+    return recvBuff
 
 #Name and port number of the server (no user arg given)
 serverName = "localhost"
@@ -38,8 +54,13 @@ while True:
         recvSocket.bind(('', reversePort))
         recvSocket.listen(1)
         connect2, addr2 = recvSocket.accept()
-        content = connect2.recv(1024)
-        print(content.decode())
+        fileSizeBuff = ""
+        #gets us the size of the data
+        fileSizeBuff = recvAll(connect2, 10)
+        fileSize = int(fileSizeBuff)
+        #pass in the size of the data so that we can recv it all
+        content = recvAll(connect2, fileSize)
+        print(content)
         connect2.close()
     elif words[0] == "ls":
         #list files on server
