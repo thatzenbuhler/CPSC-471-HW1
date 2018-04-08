@@ -28,7 +28,7 @@ reversePort = 2001
 #Change ports to user arg
 if len(sys.argv) == 3:
     serverName = sys.argv[1]
-    serverPort = sys.argv[2]
+    serverPort = int(sys.argv[2])
     contentPort = serverPort + 1
     reversePort = contentPort + 1
 
