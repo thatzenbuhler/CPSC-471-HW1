@@ -68,19 +68,22 @@ while True:
     elif words[0] == "put":
         if len(words) == 1: continue
         filename = words[1]
-        clientSocket.send((words[0] + " " + words[1]).encode())
-        contentSocket = socket(AF_INET, SOCK_STREAM)
-        contentSocket.connect((serverName, contentPort))
-        #Opens file and sends data over contentSocket
-        with open(filename) as file:
-            data = file.read()
-        file.closed
-        data = data.encode()
-        print("Sending file: ", filename)
-        bytesSent = 0
-        while bytesSent != len(data):
-            bytesSent += contentSocket.send(data[bytesSent:])
-        contentSocket.close()
+        if(os.path.isfile(words[1]):
+            clientSocket.send((words[0] + " " + words[1]).encode())
+            contentSocket = socket(AF_INET, SOCK_STREAM)
+            contentSocket.connect((serverName, contentPort))
+            #Opens file and sends data over contentSocket
+            with open(filename) as file:
+                data = file.read()
+            file.closed
+            data = data.encode()
+            print("Sending file: ", filename)
+            bytesSent = 0
+            while bytesSent != len(data):
+                bytesSent += contentSocket.send(data[bytesSent:])
+            contentSocket.close()
+        else:
+           print("File does not exist")
     clientSocket.close()
 #Close final connection
 clientSocket.close()
