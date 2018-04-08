@@ -57,11 +57,14 @@ while True:
         fileSizeBuff = ""
         #gets us the size of the data
         fileSizeBuff = recvAll(connect2, 10)
-        fileSize = int(fileSizeBuff)
-        #pass in the size of the data so that we can recv it all
-        content = recvAll(connect2, fileSize)
-        print(content)
-        connect2.close()
+        if fileSizeBuff == 0:
+            connect2.close()
+        else:
+            fileSize = int(fileSizeBuff)
+            #pass in the size of the data so that we can recv it all
+            content = recvAll(connect2, fileSize)
+            print(content)
+            connect2.close()
     elif words[0] == "ls":
         #list files on server
         clientSocket.send(words[0].encode())
