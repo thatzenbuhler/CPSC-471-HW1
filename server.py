@@ -52,6 +52,10 @@ while 1 :
         with open(menu[1]) as file:
             data = file.read()
         file.closed
+        dataSize = str(len(data))
+        while len(dataSize) < 10:
+            dataSize = "0" + dataSize
+        data = dataSize + data
         data = data.encode()
         print("Sending file: ", menu[1])
         bytesSent = 0
